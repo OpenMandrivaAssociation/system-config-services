@@ -6,7 +6,7 @@
 Summary: Utility to start and stop system services
 Name: system-config-services
 Version: 0.101.3
-Release: %mkrel 4
+Release: %mkrel 5
 URL: http://fedorahosted.org/%{name}
 Source0: http://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.bz2
 Source1: config.tar.gz
@@ -72,12 +72,23 @@ desktop-file-install --vendor system --delete-original      \
 
 %find_lang %name
 
+# for consolehelper config
+mkdir -p %{buildroot}%{_sysconfdir}/pam.d
+mkdir -p %{buildroot}%{_bindir}
+ln -sf %{_sysconfdir}/pam.d/mandriva-simple-auth %{buildroot}%{_sysconfdir}/pam.d/system-config-services
+ln -sf %{_bindir}/consolehelper %{buildroot}%{_bindir}/system-config-services
+
+#fix desktop back for using /usr/bin dir
+
+sed -i s/sbin/bin/ %{buildroot}%{_datadir}/applications/system-config-services.desktop
+
 %clean
 rm -rf %{buildroot}
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYING
+%{_bindir}/*
 %{_sbindir}/*
 %{_datadir}/applications/system-config-services.desktop
 %{_datadir}/icons/hicolor/48x48/apps/system-config-services.png
@@ -85,7 +96,7 @@ rm -rf %{buildroot}
 %{python_sitelib}/scservices
 %{python_sitelib}/scservices-%{version}-py%{python_version}.egg-info
 %{python_sitelib}/scservices.dbus-%{version}-py%{python_version}.egg-info
-
+%{_sysconfdir}/pam.d/*
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.Config.Services.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Config.Services.service
 %{_datadir}/polkit-1/actions/org.freedesktop.config.services.policy
