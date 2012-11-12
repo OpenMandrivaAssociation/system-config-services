@@ -1,0 +1,275 @@
+--- src/scservices/dbus/__init__.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/__init__.py	2011-08-11 20:07:48.436575083 +0400
+@@ -21,5 +21,5 @@
+ # Authors:
+ # Nils Philippsen <nils@redhat.com>
+ 
+-dbus_service_name = "org.fedoraproject.Config.Services"
+-dbus_service_path = "/org/fedoraproject/Config/Services"
++dbus_service_name = "org.freedesktop.Config.Services"
++dbus_service_path = "/org/freedesktop/Config/Services"
+
+--- src/scservices/dbus/proxy/serviceherders.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/proxy/serviceherders.py	2011-08-11 20:12:36.208575001 +0400
+@@ -44,7 +44,7 @@
+         self.dbus_object = bus.get_object(dbus_service_name,
+                 self.dbus_service_path)
+         self.herder_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.ServiceHerder")
++                "org.freedesktop.Config.Services.ServiceHerder")
+         self.services_dbus_object = bus.get_object(dbus_service_name,
+                 self.dbus_service_path + "/Services")
+ 
+--- src/scservices/dbus/proxy/servicesinfo.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/proxy/servicesinfo.py	2011-08-11 20:14:50.120575027 +0400
+@@ -38,7 +38,7 @@
+         self.dbus_object = bus.get_object(dbus_service_name,
+                 self.dbus_service_path)
+         self.svc_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.Service")
++                "org.freedesktop.Config.Services.Service")
+ 
+ 
+ class DBusSysVServiceInfoProxy(DBusServiceInfoProxy):
+@@ -46,7 +46,7 @@
+     def __init__(self, *p, **k):
+         super(DBusSysVServiceInfoProxy, self).__init__(*p, **k)
+         self.sysv_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.SysVService")
++                "org.freedesktop.Config.Services.SysVService")
+ 
+     @property
+     @polkit.enable_proxy
+@@ -64,7 +64,7 @@
+     def __init__(self, *p, **k):
+         super(DBusXinetdServiceInfoProxy, self).__init__(*p, **k)
+         self.xinetd_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.XinetdService")
++                "org.freedesktop.Config.Services.XinetdService")
+ 
+     @property
+     @polkit.enable_proxy
+
+--- src/scservices/dbus/service/serviceherder.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/service/serviceherder.py	2011-08-11 20:10:22.921575033 +0400
+@@ -33,7 +33,7 @@
+ 
+ class DBusServiceHerder(slip.dbus.service.Object):
+ 
+-    default_polkit_auth_required = "org.fedoraproject.config.services.manage"
++    default_polkit_auth_required = "org.freedesktop.config.services.manage"
+ 
+     def __init__(self, bus_name, object_path, herder, persistent=None):
+         slip.dbus.service.Object.__init__(self, bus_name, object_path,
+@@ -72,13 +72,13 @@
+                 path=self._service_object_path(service))
+         del self.services_dbusservices[service]
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".ServiceHerder",
+                          out_signature="b")
+     def is_ready(self):
+         return self.herder.ready
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".ServiceHerder",
+                          out_signature="as")
+     def list_services(self):
+
+--- src/scservices/dbus/service/services.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/service/services.py	2011-08-11 20:09:21.536574972 +0400
+@@ -32,7 +32,7 @@
+ 
+ class DBusService(slip.dbus.service.Object):
+ 
+-    default_polkit_auth_required = "org.fedoraproject.config.services.manage"
++    default_polkit_auth_required = "org.freedesktop.config.services.manage"
+ 
+     def __new__(cls, bus_name, object_path, service, **k):
+         srv_cls_dbussrv_cls = {services.SysVService: DBusSysVService,
+@@ -51,28 +51,28 @@
+ 
+ class DBusChkconfigService(DBusService):
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name +
+                           ".ChkconfigService", in_signature="",
+                          out_signature="")
+     def enable(self):
+         self.service.enable()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name +
+                           ".ChkconfigService", in_signature="",
+                          out_signature="")
+     def disable(self):
+         self.service.disable()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name +
+                           ".ChkconfigService", in_signature="",
+                          out_signature="i")
+     def get_enabled(self):
+         return self.service.get_enabled()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name +
+                           ".ChkconfigService", in_signature="",
+                          out_signature="b")
+@@ -82,43 +82,43 @@
+ 
+ class DBusSysVService(DBusChkconfigService):
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="")
+     def start(self):
+         self.service.start()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="")
+     def stop(self):
+         self.service.stop()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="")
+     def restart(self):
+         self.service.restart()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="")
+     def reload(self):
+         self.service.reload()
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="i")
+     def get_status(self):
+         return self.service.status
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="i")
+     def get_status_updates_running(self):
+         return self.service.status_updates_running
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="s")
+     def get_shortdescription(self):
+@@ -127,7 +127,7 @@
+         else:
+             return ""
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="s")
+     def get_description(self):
+@@ -136,13 +136,13 @@
+         else:
+             return ""
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="", out_signature="ai")
+     def get_runlevels(self):
+         return list(self.service.runlevels)
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.manage")
++    @polkit.require_auth("org.freedesktop.config.services.manage")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".SysVService",
+                          in_signature="ai", out_signature="")
+     def set_runlevels(self, runlevels):
+@@ -151,7 +151,7 @@
+ 
+ class DBusXinetdService(DBusChkconfigService):
+ 
+-    @polkit.require_auth("org.fedoraproject.config.services.info")
++    @polkit.require_auth("org.freedesktop.config.services.info")
+     @dbus.service.method(dbus_interface=dbus_service_name + ".XinetdService",
+                          in_signature="", out_signature="s")
+     def get_description(self):
+
+--- src/scservices/dbus/proxy/services.py.old	2011-08-11 20:13:02.245575001 +0400
++++ src/scservices/dbus/proxy/services.py	2011-08-11 20:13:41.001574997 +0400
+@@ -46,7 +46,7 @@
+         self.dbus_object = bus.get_object(dbus_service_name,
+                 self.dbus_service_path)
+         self.svc_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.Service")
++                "org.freedesktop.Config.Services.Service")
+ 
+         self.info = self.info_class(name, bus, self)
+ 
+@@ -69,7 +69,7 @@
+     def __init__(self, *p, **k):
+         super(DBusChkconfigServiceProxy, self).__init__(*p, **k)
+         self.chkconfig_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.ChkconfigService")
++                "org.freedesktop.Config.Services.ChkconfigService")
+ 
+     @polkit.enable_proxy(authfail_result=None)
+     def enable(self):
+@@ -109,7 +109,7 @@
+     def __init__(self, *p, **k):
+         super(DBusSysVServiceProxy, self).__init__(*p, **k)
+         self.sysv_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.SysVService")
++                "org.freedesktop.Config.Services.SysVService")
+ 
+     @polkit.enable_proxy(authfail_result=None)
+     def start(self):
+@@ -173,7 +173,7 @@
+     def __init__(self, *p, **k):
+         super(DBusXinetdServiceProxy, self).__init__(*p, **k)
+         self.xinetd_interface = dbus.Interface(self.dbus_object,
+-                "org.fedoraproject.Config.Services.XinetdService")
++                "org.freedesktop.Config.Services.XinetdService")
+ 
+ 
+ XinetdService = DBusXinetdServiceProxy
+ 
+--- src/scservices/core/systemd/constants/dbus.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/core/systemd/constants/dbus.py	2011-08-11 20:59:51.880575043 +0400
+@@ -19,10 +19,10 @@
+ ## PolicyKit enabled mechanism for privileges operations
+ 
+ # DBus service name
+-polkit_service_name = 'org.fedoraproject.Config.Services'
++polkit_service_name = 'org.freedesktop.Config.Services'
+ 
+ # DBus paths
+-_polkit_root_path = "/org/fedoraproject/Config/Services/systemd1"
++_polkit_root_path = "/org/freedesktop/Config/Services/systemd1"
+ polkit_manager_path = _polkit_root_path
+ polkit_unit_root = _polkit_root_path + "/unit"
+ 
+--- src/scservices/dbus/service/systemd/manager.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/dbus/service/systemd/manager.py	2011-08-11 20:11:12.834574961 +0400
+@@ -32,7 +32,7 @@
+ 
+ class DBusSystemDManager(slip.dbus.service.Object):
+ 
+-    default_polkit_auth_required = "org.fedoraproject.config.services.manage"
++    default_polkit_auth_required = "org.freedesktop.config.services.manage"
+ 
+     def __init__(self, bus_name, object_path, manager, persistent=None):
+         assert isinstance(manager, SystemDManager)

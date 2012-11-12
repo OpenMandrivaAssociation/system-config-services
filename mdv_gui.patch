@@ -1,0 +1,13 @@
+--- src/gui.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/gui.py	2011-08-11 20:51:01.713575075 +0400
+@@ -1141,8 +1141,8 @@
+ 
+ class UIController(object):
+ 
+-    polkit_actions = ("org.fedoraproject.config.services.info",
+-                      "org.fedoraproject.config.services.manage")
++    polkit_actions = ("org.freedesktop.config.services.info",
++                      "org.freedesktop.config.services.manage")
+ 
+     def __init__(self, use_dbus=None):
+         """Initialize a UIController object.

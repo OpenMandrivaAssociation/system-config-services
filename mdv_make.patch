@@ -1,0 +1,32 @@
+--- Makefile.old	2011-06-28 18:06:59.000000000 +0400
++++ Makefile	2011-08-11 20:25:48.375574908 +0400
+@@ -8,7 +8,7 @@
+ 
+ PREFIX=/usr
+ 
+-BINDIR=$(PREFIX)/bin
++BINDIR=$(PREFIX)/sbin
+ SYSCONFDIR=/etc
+ SBINDIR=$(PREFIX)/sbin
+ DATADIR=$(PREFIX)/share
+@@ -18,8 +18,7 @@
+ DBUS_POLICY_DIR=$(SYSCONFDIR)/dbus-1/system.d
+ DBUS_SERVICE_DIR=$(DATADIR)/dbus-1/system-services
+ 
+-POLKIT_FILES=config/org.fedoraproject.config.services.policy.0 \
+-			 config/org.fedoraproject.config.services.policy.1
++POLKIT_FILES=config/org.freedesktop.config.services.policy.1
+ 
+ PKGDATADIR=$(DATADIR)/$(PKGNAME)
+ GLADEDIR=$(PKGDATADIR)
+@@ -65,8 +64,8 @@
+ 	done
+ 	install -D -m 0644 src/$(PKGNAME).glade $(DESTDIR)$(GLADEDIR)/$(PKGNAME).glade
+ 
+-	install -D -m 0644 config/org.fedoraproject.Config.Services.conf $(DESTDIR)$(DBUS_POLICY_DIR)/org.fedoraproject.Config.Services.conf
+-	install -D -m 0644 config/org.fedoraproject.Config.Services.service $(DESTDIR)$(DBUS_SERVICE_DIR)/org.fedoraproject.Config.Services.service
++	install -D -m 0644 config/org.freedesktop.Config.Services.conf $(DESTDIR)$(DBUS_POLICY_DIR)/org.freedesktop.Config.Services.conf
++	install -D -m 0644 config/org.freedesktop.Config.Services.service $(DESTDIR)$(DBUS_SERVICE_DIR)/org.freedesktop.Config.Services.service
+ 
+ 	python -c 'import compileall; compileall.compile_dir ("'"$(DESTDIR)$(PKGDATADIR)"'", ddir="'"$(PKGDATADIR)"'", maxlevels=10, force=1)'
+ 	softdir=$(PKGDATADIR); \
