@@ -101,3 +101,14 @@ rm -rf %{buildroot}
 %{_datadir}/dbus-1/system-services/org.freedesktop.Config.Services.service
 %{_datadir}/polkit-1/actions/org.freedesktop.config.services.policy
 %{_mandir}/*/system-config-services.8*
+
+
+%changelog
+* Tue Aug 16 2011 Александр Казанцев <kazancas@mandriva.org> 0.101.3-5mdv2011.0
++ Revision: 694684
+- add consolehelper link to prevent run as not root user
+
+* Thu Aug 11 2011 Александр Казанцев <kazancas@mandriva.org> 0.101.3-4
++ Revision: 694028
+- imported package system-config-services
+
