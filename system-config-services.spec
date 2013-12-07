@@ -6,7 +6,7 @@
 Summary: Utility to start and stop system services
 Name: system-config-services
 Version: 0.101.3
-Release: 7
+Release: 8
 URL: http://fedorahosted.org/%{name}
 Source0: http://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.bz2
 Source1: config.tar.gz
