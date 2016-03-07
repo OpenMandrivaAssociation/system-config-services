@@ -88,8 +88,8 @@ sed -i s/sbin/bin/ %{buildroot}%{_datadir}/applications/system-config-services.d
 %{_datadir}/icons/hicolor/*/apps/system-config-services*.*
 %{_datadir}/system-config-services
 %{python2_sitelib}/scservices
-%{python2_sitelib}/scservices-%{version}-py%{python_version}.egg-info
-%{python2_sitelib}/scservices.dbus-%{version}-py%{python_version}.egg-info
+%{python2_sitelib}/scservices-%{version}-py*.egg-info
+%{python2_sitelib}/scservices.dbus-%{version}-py*.egg-info
 %{_sysconfdir}/pam.d/*
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.Config.Services.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Config.Services.service
