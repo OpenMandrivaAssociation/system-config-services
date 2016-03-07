@@ -1,12 +1,9 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
-%{!?python_version: %global python_version %(%{__python} -c "from distutils.sysconfig import get_python_version; print get_python_version()")}
-
 %bcond_without require_docs
 
 Summary: Utility to start and stop system services
 Name: system-config-services
-Version: 0.101.3
-Release: 14
+Version: 0.111.4
+Release: 1
 URL: http://fedorahosted.org/%{name}
 Source0: http://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.bz2
 Source1: config.tar.gz
@@ -17,9 +14,8 @@ Patch3: mdv_gui.patch
 License: GPLv2+
 Group: System/Base
 BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: python
-BuildRequires: python-devel
+BuildRequires: python2
+BuildRequires: python2-devel
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: sed
@@ -29,11 +25,11 @@ Requires: python-gamin
 Requires: hicolor-icon-theme
 Requires: pygtk2.0
 Requires: pygtk2.0-libglade
-Requires: python >= 2.3.0
-Requires: python-dbus
-Requires: python-slip >= 0.1.11
-Requires: python-slip-dbus >= 0.2.8
-Requires: python-slip-gtk
+Requires: python2 >= 2.3.0
+Requires: python2-dbus
+Requires: python2-slip >= 0.1.11
+Requires: python2-slip-dbus >= 0.2.8
+Requires: python2-slip-gtk
 # Until version 0.99.28, system-config-services contained online documentation.
 # From version 0.99.29 on, online documentation is split off into its own
 # package system-config-services-docs. The following ensures that updating from
@@ -57,8 +53,10 @@ services should be enabled on your machine.
 
 rm -f config/org.fedoraproject.*
 
+sed -i 's/python/python2/' Makefile py_rules.mk
+
 %build
-make %{?_smp_mflags}
+%make
 
 %install
 rm -rf %{buildroot}
@@ -82,33 +80,19 @@ ln -sf %{_bindir}/consolehelper %{buildroot}%{_bindir}/system-config-services
 
 sed -i s/sbin/bin/ %{buildroot}%{_datadir}/applications/system-config-services.desktop
 
-%clean
-rm -rf %{buildroot}
-
 %files -f %{name}.lang
-%defattr(-,root,root,-)
 %doc COPYING
 %{_bindir}/*
 %{_sbindir}/*
 %{_datadir}/applications/system-config-services.desktop
-%{_datadir}/icons/hicolor/48x48/apps/system-config-services.png
+%{_datadir}/icons/hicolor/*/apps/system-config-services*.*
 %{_datadir}/system-config-services
-%{python_sitelib}/scservices
-%{python_sitelib}/scservices-%{version}-py%{python_version}.egg-info
-%{python_sitelib}/scservices.dbus-%{version}-py%{python_version}.egg-info
+%{python2_sitelib}/scservices
+%{python2_sitelib}/scservices-%{version}-py%{python_version}.egg-info
+%{python2_sitelib}/scservices.dbus-%{version}-py%{python_version}.egg-info
 %{_sysconfdir}/pam.d/*
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.Config.Services.conf
 %{_datadir}/dbus-1/system-services/org.freedesktop.Config.Services.service
 %{_datadir}/polkit-1/actions/org.freedesktop.config.services.policy
 %{_mandir}/*/system-config-services.8*
-
-
-%changelog
-* Tue Aug 16 2011 Александр Казанцев <kazancas@mandriva.org> 0.101.3-5mdv2011.0
-+ Revision: 694684
-- add consolehelper link to prevent run as not root user
-
-* Thu Aug 11 2011 Александр Казанцев <kazancas@mandriva.org> 0.101.3-4
-+ Revision: 694028
-- imported package system-config-services
 

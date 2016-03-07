@@ -1,5 +1,5 @@
---- src/gui.py.old	2011-06-28 18:06:59.000000000 +0400
-+++ src/gui.py	2011-08-11 20:51:01.713575075 +0400
+--- src/scservices/gui/__init__.py.old	2011-06-28 18:06:59.000000000 +0400
++++ src/scservices/gui/__init__.py	2011-08-11 20:51:01.713575075 +0400
 @@ -1141,8 +1141,8 @@
  
  class UIController(object):

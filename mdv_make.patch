@@ -10,8 +10,8 @@
  SBINDIR=$(PREFIX)/sbin
  DATADIR=$(PREFIX)/share
 @@ -18,8 +18,7 @@
- DBUS_POLICY_DIR=$(SYSCONFDIR)/dbus-1/system.d
- DBUS_SERVICE_DIR=$(DATADIR)/dbus-1/system-services
+
+ ICONDIR=$(DATADIR)/icons/hicolor
  
 -POLKIT_FILES=config/org.fedoraproject.config.services.policy.0 \
 -			 config/org.fedoraproject.config.services.policy.1
