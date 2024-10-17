@@ -4,7 +4,7 @@ Summary: Utility to start and stop system services
 Name: system-config-services
 Version: 0.111.4
 Release: 3
-URL: http://fedorahosted.org/%{name}
+URL: https://fedorahosted.org/%{name}
 Source0: http://fedorahosted.org/released/%{name}/%{name}-%{version}.tar.bz2
 Source1: config.tar.gz
 Patch0:	mdv_desktop.patch
