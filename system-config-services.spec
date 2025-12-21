@@ -14,6 +14,7 @@ Patch3: mdv_gui.patch
 License: GPLv2+
 Group: System/Base
 BuildArch: noarch
+BuildRequires:	make
 BuildRequires: python2
 BuildRequires: python2-devel
 BuildRequires: gettext
